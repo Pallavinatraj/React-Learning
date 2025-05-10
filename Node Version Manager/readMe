@@ -1,0 +1,56 @@
+How to Install NVM on Windows
+1. Click on "Download Now"
+In the nvm-windows repository Readme, click on "Download Now!":
+2. Install the .exe file of the latest release
+In the latest release (which as of the time of writing this is 1.1.9), you'll find different assets. Click on the nvm-setup.exe asset which is the installation file for the tool:
+ree 3,000-hour curriculum
+
+SEPTEMBER 9, 2022
+/
+#NODE
+Node Version Manager – NVM Install Guide
+Node Version Manager – NVM Install Guide
+By Dillion Megida
+
+In this article, I'll explain how you can install NVM, or Node Version Manager, on Windows, Linux, and Mac.
+
+What is NVM?
+Node Version Manager (NVM), as the name implies, is a tool for managing Node versions on your device.
+
+Different projects on your device may be using different versions of Node. Using only one version (the one installed by npm) for these different projects may not give you accurate execution results.
+
+For example, if you use a Node version of 10.0.0 for a project that uses 12.0.0, you may get some errors. And if you update the Node version to 12.0.0 with npm, and you use it for a project that uses 10.0.0, you may not get the expected experience.
+
+In fact, you would most likely get a warning that says:
+
+This project requires Node version X
+Instead of using npm to install and uninstall Node versions for your different projects, you can use nvm, which helps you effectively manage your node versions for each project.
+
+NVM allows you to install different versions of Node, and switch between these versions depending on the project that you're working on via the command line.
+
+In the next sections, I'll show you how to install NVM on your Windows, Linux, or Mac device.
+
+Before proceeding, I also recommend that you uninstall Node.js if you have it installed already so that you do not have any conflicts with Node.js and nvm.
+
+How to Install NVM on Windows
+NVM is mostly supported on Linux and Mac. It doesn't have support for Windows. But there's a similar tool created by coreybutler to provide an nvm experience in Windows called nvm-windows.
+
+nvm-windows provides a management utility for managing Node.js versions in Windows. Here's how to install it:
+
+1. Click on "Download Now"
+In the nvm-windows repository Readme, click on "Download Now!":
+
+Image
+
+This will open a page showing different NVM releases.
+
+2. Install the .exe file of the latest release
+In the latest release (which as of the time of writing this is 1.1.9), you'll find different assets. Click on the nvm-setup.exe asset which is the installation file for the tool:
+
+3. Complete the Installation Wizard
+Open the file that you have downloaded, and complete the installation wizard.
+
+When done, you can confirm that nvm has been installed by running:
+
+nvm -v
+If nvm was installed correctly, this command will show you the nvm version installed.
