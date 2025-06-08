@@ -1,146 +1,40 @@
-import React, { useContext, useRef, useState } from "react";
-import { PostListContext } from "../Store/PostListProvider.jsx";
-import { useNavigate } from "react-router-dom";
+import { redirect } from "react-router-dom";
 
-function CreatePost() {
-  const userIdElement = useRef();
-  const postTitleElement = useRef();
-  const postBodyElement = useRef();
-  const reactionsElement = useRef();
-  const tagsElement = useRef();
-  const navigate = useNavigate();
+// Access context (like addPost) via external import if needed
+// You can't use useContext in non-component functions
 
-  const [alertMsg, setAlertMsg] = useState("");
+export async function createRouterPost({ request }) {
+  const formData = await request.formData();
+  const postData = Object.fromEntries(formData);
 
-  const { addPost } = useContext(PostListContext);
+  const userId = parseInt(postData.userId);
+  const title = postData.title;
+  const body = postData.body;
+  const reactions = parseInt(postData.reactions);
+  const tags = postData.tags.split(",").map((tag) => tag.trim());
 
-  const handleOnSubmit = (event) => {
-    event.preventDefault();
-
-    const userId = userIdElement.current.value;
-    const postTitle = postTitleElement.current.value;
-    const postBody = postBodyElement.current.value;
-    const reactions = reactionsElement.current.value;
-    const tags = tagsElement.current.value.split(",").map((tag) => tag.trim());
-
-    fetch("https://dummyjson.com/posts/add", {
+  try {
+    const response = await fetch("https://dummyjson.com/posts/add", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
-        userId: userId,
-        title: postTitle,
-        body: postBody,
-        reactions: reactions,
-        tags: tags,
+        userId,
+        title,
+        body,
+        reactions,
+        tags,
       }),
-    })
-      .then((res) => res.json())
-      .then((post) => {
-        const uniquePost = {
-          ...post,
-          id: Date.now(), // generate unique id based on timestamp
-        };
-        addPost(uniquePost);
+    });
 
-        setAlertMsg("✅ Post created successfully!");
+    const post = await response.json();
+    const uniquePost = { ...post, id: Date.now() };
 
-        // Optionally clear inputs
-        userIdElement.current.value = "";
-        postTitleElement.current.value = "";
-        postBodyElement.current.value = "";
-        reactionsElement.current.value = "";
-        tagsElement.current.value = "";
+    // You can save this to local storage or global store via some custom logic here
+    // e.g., trigger a toast or reload post list
 
-        // Navigate after showing alert for 3 seconds
-        setTimeout(() => {
-          setAlertMsg("");
-          navigate("/");
-        }, 3000);
-      })
-      .catch((error) => {
-        console.error("Error creating post:", error);
-        setAlertMsg("❌ Failed to create post. Please try again.");
-        setTimeout(() => setAlertMsg(""), 3000);
-      });
-  };
-
-  return (
-    <form className="p-3 border rounded bg-light" onSubmit={handleOnSubmit}>
-      {alertMsg && (
-        <div className="alert alert-success" role="alert">
-          {alertMsg}
-        </div>
-      )}
-
-      <div className="mb-3">
-        <label htmlFor="userIdInput" className="form-label">
-          Enter Your UserId
-        </label>
-        <input
-          type="text"
-          className="form-control"
-          id="userIdInput"
-          placeholder="UserId"
-          ref={userIdElement}
-        />
-      </div>
-
-      <div className="mb-3">
-        <label htmlFor="titleInput" className="form-label">
-          Post Title
-        </label>
-        <input
-          type="text"
-          className="form-control"
-          id="titleInput"
-          placeholder="Title"
-          ref={postTitleElement}
-        />
-      </div>
-
-      <div className="mb-3">
-        <label htmlFor="messageInput" className="form-label">
-          Your Message
-        </label>
-        <textarea
-          className="form-control"
-          id="messageInput"
-          rows="3"
-          ref={postBodyElement}
-        ></textarea>
-      </div>
-
-      <div className="mb-3">
-        <label htmlFor="reactionsInput" className="form-label">
-          Enter Your Reactions
-        </label>
-        <input
-          type="number"
-          className="form-control"
-          id="reactionsInput"
-          placeholder="Reactions"
-          ref={reactionsElement}
-        />
-      </div>
-
-      <div className="mb-3">
-        <label htmlFor="tagsInput" className="form-label">
-          Enter Your HashTags (comma separated)
-        </label>
-        <input
-          type="text"
-          className="form-control"
-          id="tagsInput"
-          placeholder="e.g. coding,reactjs"
-          ref={tagsElement}
-        />
-      </div>
-
-      <button type="submit" className="btn btn-success">
-        Create
-      </button>
-    </form>
-  );
+    return redirect("/"); // redirect to homepage after successful creation
+  } catch (error) {
+    console.error("Error creating post:", error);
+    return redirect("/?error=failed"); // optional: show error on redirect
+  }
 }
-
-export default CreatePost;

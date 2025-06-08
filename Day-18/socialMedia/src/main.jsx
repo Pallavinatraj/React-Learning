@@ -4,7 +4,7 @@ import "./index.css";
 import App from "./routes/App.jsx";
 import "bootstrap/dist/css/bootstrap.min.css";
 import { RouterProvider, createBrowserRouter } from "react-router-dom";
-import CreatePost from "./Components/createPost.jsx";
+import CreatePost, { createRouterPost } from "./Components/createPost.jsx";
 import PostList, { PostLoader } from "./Components/PostList.jsx";
 
 const router = createBrowserRouter([
@@ -20,6 +20,7 @@ const router = createBrowserRouter([
       {
         path: "/create-Post",
         element: <CreatePost />,
+        action: createRouterPost,
       },
     ],
   },
